@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
+import fortRoutes from './routes/forts.js';
 
 dotenv.config();
 const app = express();
@@ -22,5 +23,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // Routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
+app.use('/forts', fortRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

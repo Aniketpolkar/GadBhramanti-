@@ -6,3 +6,21 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [tailwindcss(),react()],
 })
+
+
+// /** @type {import('tailwindcss').Config} */
+// export default {
+//   content: [
+//     "./index.html",
+//     "./src/**/*.{js,ts,jsx,tsx}",
+//   ],
+//   theme: {
+//     extend: {
+//       fontFamily: {
+//         header: ['"Tiro Devanagari Marathi"', 'serif'],
+//         body: ['"Anek Devanagari"', 'sans-serif'],
+//       },
+//     },
+//   },
+//   plugins: [],
+// };
