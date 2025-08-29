@@ -19,7 +19,8 @@ L.Icon.Default.mergeOptions({
 
 const FortMap = ({ forts }) => {
   return (
-    <MapContainer center={[18.5204, 74.8567]} zoom={8} style={{ height: '600px', width: '100%' }}>
+    <div className='flex justify-center items-center  mx-15 my-5 border-amber-500 border-4 '>
+    <MapContainer center={[18.5204, 74.8567]} zoom={8} scrollWheelZoom={false} style={{ height: '550px', width: '100%',zIndex:-0 }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       {forts.map((fort) => (
@@ -40,6 +41,7 @@ const FortMap = ({ forts }) => {
         </Marker>
       ))}
     </MapContainer>
+    </div>
   );
 };
 

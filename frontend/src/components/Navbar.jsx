@@ -235,7 +235,7 @@ const Navbar = () => {
         />
       )}
 
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      <nav className={`fixed z-50 top-0 left-0 right-0 transition-all duration-500 ${
         isScrolled 
           ? 'bg-slate-900/95 backdrop-blur-md shadow-2xl shadow-orange-500/10' 
           : 'bg-gradient-to-r from-slate-900 via-orange-900/90 to-red-900/90'
@@ -251,6 +251,7 @@ const Navbar = () => {
           <div className="flex justify-between items-center h-20">
             
             {/* Logo Section with animated elements */}
+            <Link to="/">
             <div className="flex items-center group">
               {/* Decorative fort icon */}
               <div className="relative mr-4 p-1 rounded-full bg-gradient-to-br from-gray-400 to-red-600 shadow-lg group-hover:shadow-orange-500/25 transition-all duration-300">
@@ -276,10 +277,18 @@ const Navbar = () => {
                 <p className="text-xs text-orange-200 mt-1 opacity-80">Heritage • Adventure • History</p>
               </div>
             </div>
-
+            </Link>
             {/* Desktop Navigation */}
             <div className="hidden lg:block">
               <div className="flex items-center space-x-2">
+                 <Link 
+                      to="/about" 
+                      className="group relative px-6 py-3 rounded-full font-semibold text-slate-900 bg-white hover:bg-gradient-to-r hover:from-orange-100 hover:to-amber-100 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-orange-500/25"
+                    >
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-orange-200 to-amber-200 transition-opacity duration-300 rounded-full" />
+            
+                      <span className="relative z-10 group-hover:text-orange-900 transition-colors duration-300">About</span>
+                    </Link>
                 {!user ? (
                   <> 
                     {/* Login Button */}
@@ -331,6 +340,7 @@ const Navbar = () => {
                     </Link>
                   </>
                 )}
+               
               </div>
             </div>
 
@@ -367,6 +377,19 @@ const Navbar = () => {
 
               {/* Mobile navigation links based on authentication */}
               <div className="space-y-3">
+                <Link 
+                      to="/about" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center p-4 rounded-2xl bg-white text-slate-900 hover:bg-orange-50 transition-all duration-300 group font-semibold"
+                    >
+                      <svg className="w-5 h-5 mr-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <span>About</span>
+                      <svg className="w-4 h-4 ml-auto text-orange-600 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
                 {!user ? (
                   <>
                     {/* Login Link - Mobile */}
@@ -432,6 +455,7 @@ const Navbar = () => {
                     </Link>
                   </>
                 )}
+                 
               </div>
 
               {/* Mobile menu footer */}

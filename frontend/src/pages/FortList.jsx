@@ -31,6 +31,7 @@ const FortList = () => {
         setLoading(false);
       }
     };
+    // window.scrollTo( 1000, 1000);
     fetchForts();
   }, []);
 
@@ -38,8 +39,8 @@ const FortList = () => {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
       <p className="text-center text-orange-700 text-xl font-semibold">Loading forts...</p>
     </div>
-  );
-
+    );
+ 
   return (
     
     <div className="min-h-screen bg-gradient-to-br from-orange-250 via-red-50 to-orange-200 p-6">

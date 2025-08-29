@@ -3,7 +3,22 @@ import { useEffect, useState, useContext } from 'react';
 import API from '../api/axios';
 import { useParams, Link } from 'react-router-dom';
 import { AuthContext } from "../context/authcontext";
-
+import { MapContainer, TileLayer, Polyline, useMap,Popup,Marker } from 'react-leaflet';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+const downloadMapPDF = () => {
+  const mapElement = document.querySelector(".leaflet-container"); // Leaflet map div
+  html2canvas(mapElement).then((canvas) => {
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({
+      orientation: "landscape",
+      unit: "px",
+      format: [canvas.width, canvas.height],
+    });
+    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+    pdf.save("fort-map.pdf");
+  });
+};
 
 const FortDetail = () => {
   const { id } = useParams();
@@ -14,6 +29,51 @@ const FortDetail = () => {
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [routes, setRoutes] = useState([]);
+  const [routeLoading, setRouteLoading] = useState(true);
+  const [routeError, setRouteError] = useState(null);
+
+
+  navigator.geolocation.getCurrentPosition(
+  (position) => {
+    console.log("Latitude:", position.coords.latitude);
+    console.log("Longitude:", position.coords.longitude);
+  },
+  (error) => {
+    console.error("Error getting location:", error);
+  }
+);
+
+
+  const LocateUser = () => {
+  const map = useMap();
+  const [userPos, setUserPos] = useState(null);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        setUserPos([lat, lng]);
+        map.setView([lat, lng], 8); // Center map on user
+      });
+    }
+  }, [map]);
+
+  if (!userPos) return null;
+  return <Marker position={userPos}></Marker>; // Marker on your location
+};
+
+
+const FitBounds = ({ routes }) => {
+  const map = useMap();
+  if (routes.length === 0) return null;
+
+  const allPoints = routes.flatMap(r => r.geometry.coordinates.map(([lng, lat]) => [lat, lng]));
+  map.fitBounds(allPoints, { padding: [50, 50] });
+  return null;
+};
+
 
   const fetchFortDetails = async () => {
     try {
@@ -32,6 +92,25 @@ const FortDetail = () => {
   useEffect(() => {
     fetchFortDetails();
   }, [id]);
+
+  useEffect(() => {
+  const fetchRoutes = async () => {
+    try {
+      setRouteLoading(true);
+      const res = await API.get(`/forts/${id}/routes`);
+      setRoutes(res.data);
+      setRouteError(null);
+    } catch (err) {
+      console.error("Error fetching routes:", err);
+      setRouteError("Failed to load trek routes. Please try again later.");
+    } finally {
+      setRouteLoading(false);
+    }
+  };
+
+  fetchRoutes();
+}, [id]);
+  
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -121,8 +200,14 @@ const FortDetail = () => {
           {fort.region && (
             <h2 className="text-xl font-semibold text-white/90">Region: {fort.region}</h2>
           )}
+            {user.visitedForts && (
+            <h2 className="text-xl font-semibold text-white/90">visited: {user.visitedForts[0]}</h2>
+          )}
+          {user && (
+            <h2 className="text-xl font-semibold text-white/90">add to wishlist {user.name}</h2>
+          )}
+       
         </div>
-
         <div className="p-8">
           {/* Image Slider */}
           {fort.images?.length > 0 && (
@@ -241,7 +326,7 @@ const FortDetail = () => {
             </div>
           )}
 
-          <hr className="my-8 border-gray-200" />
+          <hr className="my-8 border-gray-800" />
 
           {/* Comments Section */}
           <div className="bg-gray-50 p-6 rounded-lg shadow-inner">
@@ -296,6 +381,7 @@ const FortDetail = () => {
                   >
                     {isSubmitting ? 'Posting...' : 'Post Comment'}
                   </button>
+    
                 </div>
               ) : (
                 <p className="text-center text-gray-500 font-medium">
@@ -304,6 +390,52 @@ const FortDetail = () => {
               )}
             </form>
           </div>
+              
+           <hr className="my-8 border-gray-800" />
+           {/* For route */}
+
+            {routes && routes.length > 0 ? (
+                  <div>
+                    <MapContainer
+                      center={[routes[0].geometry.coordinates[0][1], routes[0].geometry.coordinates[0][0]]}
+                      scrollWheelZoom={false}
+                      zoom={15}
+                      style={{ height: '600px', width: '100%' }}
+                    >
+                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                      {routes.map(route => (
+                        <Polyline
+                          key={route._id}
+                          positions={route.geometry.coordinates.map(([lng, lat]) => [lat, lng])}
+                          color="red"
+                          weight={5}
+                        />
+                      ))}
+                      <FitBounds routes={routes} />
+                      <Marker
+                        position={[
+                          routes[0].geometry.coordinates[0][1],
+                          routes[0].geometry.coordinates[0][0],
+                        ]}
+                      >
+                        <Popup>Finish</Popup>
+                      </Marker>
+                      <LocateUser />
+                    </MapContainer>
+                  </div>
+                ) : (
+                  <p className = "flex justify-center text-black items-center text-2xl mt-2 p-4">
+                    Map not uploaded
+                  </p>
+                )}
+
+            <button
+              onClick={downloadMapPDF}
+              className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+            >
+              Download Map
+            </button>
+
         </div>
       </div>
     </div>

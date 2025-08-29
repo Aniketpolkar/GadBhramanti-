@@ -7,8 +7,11 @@ import PrivateRoute from './components/PrivateRoute';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import FortList from './pages/FortList';
+import About from './components/About'
 import FortDetail from './pages/FortDetail';
 import 'leaflet/dist/leaflet.css';
+import AboutPage from './components/About';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -16,14 +19,15 @@ function App() {
       <BrowserRouter >
         <Routes>
          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<><Navbar /><Login /></>} />
-          <Route path="/register" element={<><Navbar /><Register /></>} />
+          <Route path="/login" element={<><Navbar /><Login /><Footer /></>} />
+          <Route path="/about" element={<><Navbar /><About /><Footer /></>} />
+          <Route path="/register" element={<><Navbar /><Register /><Footer /></>} />
           <Route
             path="/profile"
             element={<PrivateRoute><Navbar/><Profile /></PrivateRoute>}
           />
-          <Route path="/forts" element={<><Navbar/><FortList /></>} />
-          <Route path="/forts/:id" element={<><Navbar/><FortDetail /></>} />
+          <Route path="/forts" element={<><Navbar/><FortList /><Footer /></>} />
+          <Route path="/forts/:id" element={<><Navbar/><FortDetail /><Footer /></>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

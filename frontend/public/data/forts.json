@@ -1,0 +1,14 @@
+[
+  {
+    "_id": "1",
+    "name": "Rajgad Fort",
+    "difficulty": "Moderate",
+    "location": { "lat": 18.248566, "lng": 73.681254 }
+  },
+  {
+    "_id": "2",
+    "name": "Sinhagad Fort",
+    "difficulty": "Hard",
+    "location": { "lat": 18.3662, "lng": 73.7554 }
+  }
+]

@@ -136,7 +136,7 @@ import express from 'express';
 import Fort from '../models/fort.js';
 import { verifyToken, authMiddleware } from '../middleware/auth.js';
 import User from '../models/user.js';
-
+import Route from '../models/route.js';
 const router = express.Router();
 
 // GET all forts
@@ -163,6 +163,14 @@ router.get('/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+});
+
+// GET routes for a fort
+router.get('/:id/routes', async (req, res) => {
+  try {
+    const routes = await Route.find({ fortId: req.params.id });
+    res.json(routes);
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 // POST comment to fort
@@ -223,43 +231,43 @@ router.get("/:fortId/comments", async (req, res) => {
 });
 
 // DELETE comment (optional - for comment management)
-router.delete("/:fortId/comment/:commentId", verifyToken, async (req, res) => {
-  try {
-    const fort = await Fort.findById(req.params.fortId);
+// router.delete("/:fortId/comment/:commentId", verifyToken, async (req, res) => {
+//   try {
+//     const fort = await Fort.findById(req.params.fortId);
     
-    if (!fort) {
-      return res.status(404).json({ message: "Fort not found" });
-    }
+//     if (!fort) {
+//       return res.status(404).json({ message: "Fort not found" });
+//     }
 
-    // Find the comment
-    const comment = fort.comments.id(req.params.commentId);
+//     // Find the comment
+//     const comment = fort.comments.id(req.params.commentId);
     
-    if (!comment) {
-      return res.status(404).json({ message: "Comment not found" });
-    }
+//     if (!comment) {
+//       return res.status(404).json({ message: "Comment not found" });
+//     }
 
-    // Check if user owns the comment or is admin
-    if (comment.user.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to delete this comment" });
-    }
+//     // Check if user owns the comment or is admin
+//     if (comment.user.toString() !== req.user.id) {
+//       return res.status(403).json({ message: "Not authorized to delete this comment" });
+//     }
 
-    // Remove the comment
-    comment.remove();
-    await fort.save();
+//     // Remove the comment
+//     comment.remove();
+//     await fort.save();
 
-    // Return updated fort with populated comments
-    const updatedFort = await Fort.findById(req.params.fortId)
-      .populate({ 
-        path: "comments.user", 
-        select: "username profilePic bio city createdAt" 
-      });
+//     // Return updated fort with populated comments
+//     const updatedFort = await Fort.findById(req.params.fortId)
+//       .populate({ 
+//         path: "comments.user", 
+//         select: "username profilePic bio city createdAt" 
+//       });
 
-    res.json(updatedFort);
+//     res.json(updatedFort);
 
-  } catch (err) {
-    console.error("Error deleting comment:", err);
-    res.status(500).json({ error: err.message });
-  }
-});
+//   } catch (err) {
+//     console.error("Error deleting comment:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
 export default router;
