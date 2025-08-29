@@ -21,7 +21,12 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+   visitedForts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Fort" }],
+  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Fort" }],
+  bio: String,
+  city:String,
+  profilePic: String,
 });
 
 export default mongoose.model('User', userSchema);

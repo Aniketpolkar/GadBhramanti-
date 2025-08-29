@@ -2,10 +2,23 @@
 import { useEffect, useState } from 'react';
 import API from '../api/axios';
 import { Link } from 'react-router-dom';
+import Filter from '../components/Filter';
+import SearchBar from "../components/SearchBar"; // ⬅️ import it
+import 'leaflet/dist/leaflet.css';
+import FortMap from '../components/FortMap';
 
 const FortList = () => {
   const [forts, setForts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [regionFilter, setRegionFilter] = useState('All');
+  const [difficultyFilter, setDifficultyFilter] = useState('All');
+  const [search, setSearch] = useState("");
+
+   const filteredForts = forts.filter(fort => {
+        return (regionFilter === 'All' || fort.region === regionFilter) &&
+                (difficultyFilter === 'All' || fort.difficulty === difficultyFilter) && 
+                fort.name.toLowerCase().startsWith(search.toLowerCase());
+        });
 
   useEffect(() => {
     const fetchForts = async () => {
@@ -28,23 +41,42 @@ const FortList = () => {
   );
 
   return (
+    
     <div className="min-h-screen bg-gradient-to-br from-orange-250 via-red-50 to-orange-200 p-6">
       {/* Header with gradient background */}
       <div className="text-center mb-8">
-        {/* <h2 className="text-4xl font-bold mt-18 mb-4 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-          Forts of Maharashtra
-        </h2> */}
         <h1 className="text-4xl font-bold mt-18 mb-4 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent" style={{ fontFamily: 'Tiro Devanagari Marathi, serif' }}>
               Explore the Forts of Maharashtra
         </h1>
          
 
         <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto rounded-full"></div>
+        {/* <input
+        type="text"
+        placeholder="Search forts..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="px-4 py-2 border rounded shadow w-full mb-4"
+      /> */}
+          {/* <SearchBar onSearch={handleSearch} /> */}
+          {/* Filter Component */}
+      <Filter
+        forts={forts}
+        search = {search}
+        setSearch={setSearch}
+        regionFilter={regionFilter}
+        setRegionFilter={setRegionFilter}
+        difficultyFilter={difficultyFilter}
+        setDifficultyFilter={setDifficultyFilter}
+      />
+
       </div>
+   
 
       {/* Fort Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {forts.map((fort) => (
+        
+        {filteredForts.map((fort) => (
           <div 
             key={fort._id} 
             className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-orange-100 overflow-hidden"
@@ -109,16 +141,29 @@ const FortList = () => {
           </div>
         ))}
       </div>
-
+      
+      {/* Fort Map */}
+     <FortMap forts={filteredForts} />
+    
       {/* Empty State */}
-      {forts.length === 0 && !loading && (
+      {/* {forts.length === 0 && !loading && (
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-400 rounded-full mx-auto mb-4 flex items-center justify-center">
             <span className="text-white text-2xl">🏰</span>
           </div>
           <p className="text-gray-600 text-lg">No forts found</p>
         </div>
-      )}
+      )} */}
+      
+      {filteredForts.length === 0 && !loading && (
+  <div className="text-center py-12">
+    <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-400 rounded-full mx-auto mb-4 flex items-center justify-center">
+      <span className="text-white text-2xl">🏰</span>
+    </div>
+    <p className="text-gray-600 text-lg">No forts found for selected filters</p>
+  </div>
+)}
+
     </div>
   );
 };

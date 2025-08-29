@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import FortList from './pages/FortList';
 import FortDetail from './pages/FortDetail';
+import 'leaflet/dist/leaflet.css';
 
 function App() {
   return (

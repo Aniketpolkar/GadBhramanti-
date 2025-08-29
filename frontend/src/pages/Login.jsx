@@ -29,7 +29,7 @@ const Login = () => {
         {error && <p className="text-red-500 mb-2">{error}</p>}
         <input name="email" placeholder="Email" value={form.email} onChange={handleChange} className="w-full mb-2 p-2 border rounded" />
         <input type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">Login</button>
+        <button type="submit" className="w-full bg-orange-500 text-white py-2 rounded">Login</button>
       </form>
     </div>
   );
