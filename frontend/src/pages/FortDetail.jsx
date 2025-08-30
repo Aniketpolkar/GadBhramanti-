@@ -2,7 +2,7 @@
 import { useEffect, useState, useContext } from 'react';
 import API from '../api/axios';
 import { useParams, Link } from 'react-router-dom';
-import { AuthContext } from "../context/authcontext";
+import { AuthContext } from "../context/AuthContext";
 import { MapContainer, TileLayer, Polyline, useMap,Popup,Marker } from 'react-leaflet';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";

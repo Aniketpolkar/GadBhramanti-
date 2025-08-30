@@ -210,7 +210,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useContext } from "react";
-import { AuthContext } from "../context/authcontext";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);

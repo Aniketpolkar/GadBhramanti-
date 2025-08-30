@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import API from '../api/axios';
-import { AuthContext } from '../context/authcontext';
+import { AuthContext } from '../context/AuthContext';
 
 const Profile = () => {
   const { user, logoutUser } = useContext(AuthContext);

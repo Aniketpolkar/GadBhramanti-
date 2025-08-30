@@ -41,7 +41,7 @@ import { useState, useContext } from "react";
 import { Eye, EyeOff, Mail, Lock, ArrowRight, AlertCircle } from "lucide-react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/authcontext";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const { loginUser } = useContext(AuthContext);

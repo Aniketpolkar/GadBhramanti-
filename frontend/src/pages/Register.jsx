@@ -105,7 +105,7 @@
 
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/authcontext";
+import { AuthContext } from "../context/AuthContext";
 import API from "../api/axios";
 import { User, Mail, Lock, MapPin, Image as ImageIcon, AlertCircle, ArrowRight } from "lucide-react";
 
