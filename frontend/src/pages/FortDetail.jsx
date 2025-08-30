@@ -203,9 +203,9 @@ const FitBounds = ({ routes }) => {
             {user.visitedForts && (
             <h2 className="text-xl font-semibold text-white/90">visited: {user.visitedForts[0]}</h2>
           )}
-          {user && (
+          {/* {user && (
             <h2 className="text-xl font-semibold text-white/90">add to wishlist {user.name}</h2>
-          )}
+          )} */}
        
         </div>
         <div className="p-8">
