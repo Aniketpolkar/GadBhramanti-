@@ -259,7 +259,7 @@ const Navbar = () => {
                   <path d="M12 2L2 7v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7l-10-5zM12 4.2L20 8v9H4V8l8-3.8z"/>
                   <path d="M8 10h2v6H8zm6 0h2v6h-2z"/>
                 </svg> */}
-                <img className='w-18 h-18 text-white rounded-full object-cover ' src="../public/icon_4.png" alt="icon" />
+                <img className='w-18 h-18 text-white rounded-full object-cover ' src="https://res.cloudinary.com/dle4nbom5/image/upload/v1756587077/icon_4_quc1uf.png" alt="icon" />
                 {/* <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" /> */}
               </div>
               
