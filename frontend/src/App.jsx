@@ -26,8 +26,8 @@ function App() {
             path="/profile"
             element={<PrivateRoute><Navbar/><Profile /></PrivateRoute>}
           />
-          <Route path="/forts" element={<><Navbar/><FortList /><Footer /></>} />
-          <Route path="/forts/:id" element={<><Navbar/><FortDetail /><Footer /></>} />
+          <Route path="/forts" element={<PrivateRoute><Navbar/><FortList /><Footer /></PrivateRoute>} />
+          <Route path="/forts/:id" element={<PrivateRoute><Navbar/><FortDetail /><Footer /></PrivateRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
