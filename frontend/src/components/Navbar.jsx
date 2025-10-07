@@ -289,14 +289,7 @@ const Navbar = () => {
             
                       <span className="relative z-10 group-hover:text-orange-900 transition-colors duration-300">About</span>
                     </Link>
-                 <Link 
-                      to="/images" 
-                      className="group relative px-6 py-3 rounded-full font-semibold text-slate-900 bg-white hover:bg-gradient-to-r hover:from-orange-100 hover:to-amber-100 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-orange-500/25"
-                    >
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-orange-200 to-amber-200 transition-opacity duration-300 rounded-full" />
-            
-                      <span className="relative z-10 group-hover:text-orange-900 transition-colors duration-300">Images</span>
-                    </Link>
+                 
                 {!user ? (
                   <> 
                     {/* Login Button */}
@@ -328,6 +321,14 @@ const Navbar = () => {
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-orange-200 to-amber-200 transition-opacity duration-300 rounded-full" />
             
                       <span className="relative z-10 group-hover:text-orange-900 transition-colors duration-300">Blogs</span>
+                    </Link>
+                    <Link 
+                      to="/images" 
+                      className="group relative px-6 py-3 rounded-full font-semibold text-slate-900 bg-white hover:bg-gradient-to-r hover:from-orange-100 hover:to-amber-100 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-orange-500/25"
+                    >
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-orange-200 to-amber-200 transition-opacity duration-300 rounded-full" />
+            
+                      <span className="relative z-10 group-hover:text-orange-900 transition-colors duration-300">Images</span>
                     </Link>
                     {/* Explore Forts Button */}
                     <Link 
