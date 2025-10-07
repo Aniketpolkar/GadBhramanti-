@@ -1,0 +1,9 @@
+/* blog.css */
+.blog-content img {
+  max-width: 400px;   /* resize image */
+  height: auto;       /* keep aspect ratio */
+  display: block;     /* make it behave like block element */
+  margin: 10px auto;  /* center the image */
+  border-radius: 8px; /* optional: rounded corners */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* optional: modern look */
+}

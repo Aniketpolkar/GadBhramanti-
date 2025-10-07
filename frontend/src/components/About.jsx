@@ -5,20 +5,20 @@ const AboutPage = () => {
   const teamMembers = [
     {
       name: "Aniket Polkar",
-      role: "Founder",
-      image: "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=200&h=200&fit=crop&crop=face",
+      role: "Founder & Trek  Coordinator",
+      image: "https://res.cloudinary.com/dle4nbom5/image/upload/v1757280110/IMG_3323_2_ikeprv.jpg",
       bio: "Passionate fort explorer and heritage enthusiast, Aniket started GadBhramanti to showcase the pride of Maharashtra – its forts."
     },
     {
-      name: "Rohit Kulkarni",
-      role: "Trek & Events Coordinator",
-      image: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&h=200&fit=crop&crop=face",
-      bio: "Certified trek leader who organizes fort treks, heritage walks, and educational tours for enthusiasts."
+      name: "Prajyot Waghmare",
+      role: "President - लावा ताकद संघटना",
+      image: "https://res.cloudinary.com/dle4nbom5/image/upload/v1757280912/IMG-20250330-WA0037_g8kwu5.jpg",
+      bio: "Worked as President for last 2 years.   Certified trek leader who organizes fort treks, heritage walks, and educational tours for enthusiasts."
     },
     {
-      name: "Priya Deshmukh",
+      name: "Om Sane",
       role: "Community Manager",
-      image: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=200&h=200&fit=crop&crop=face",
+      image: "https://res.cloudinary.com/dle4nbom5/image/upload/v1757017437/IMG-20250330-WA0171_h3yq2x.jpg",
       bio: "Engages with our growing community of fort lovers and ensures our stories reach thousands of explorers."
     }
   ];
@@ -152,7 +152,7 @@ const AboutPage = () => {
                 <img 
                   src={member.image} 
                   alt={member.name}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-88 object-cover"
                 />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-800 mb-2">{member.name}</h3>

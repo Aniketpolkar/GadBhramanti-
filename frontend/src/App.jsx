@@ -12,15 +12,22 @@ import FortDetail from './pages/FortDetail';
 import 'leaflet/dist/leaflet.css';
 import AboutPage from './components/About';
 import Footer from './components/Footer';
-
+import Blog from './pages/Blog'
+import BlogList from './pages/BlogList';
+import BlogDetail from './pages/BlogDetail'
+import Images from './pages/Images';
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter >
         <Routes>
          <Route path="/" element={<Home />} />
+         <Route path="/blog" element={<><Navbar /><Blog /></>} />
+         <Route path="/blog-list" element={<><Navbar /><BlogList /></>} />
+         <Route path="/blog/:id" element={<><Navbar /><BlogDetail /></>} />
           <Route path="/login" element={<><Navbar /><Login /><Footer /></>} />
           <Route path="/about" element={<><Navbar /><About /><Footer /></>} />
+          <Route path="/images" element={<><Navbar /><Images /><Footer /></>} />
           <Route path="/register" element={<><Navbar /><Register /><Footer /></>} />
           <Route
             path="/profile"

@@ -1,0 +1,379 @@
+// // // src/pages/EditFort.jsx
+// // import { useState, useEffect } from "react";
+// // import { useNavigate, useParams } from "react-router-dom";
+// // import { updateFortApi, getFortByIdApi } from "../api/adminApi";
+
+// // export default function EditFort() {
+// //   const [form, setForm] = useState({
+// //     name: "",
+// //     description: "",
+// //     region: "",
+// //     imageUrl: "",
+// //   });
+
+// //   const navigate = useNavigate();
+// //   const { id } = useParams(); // get fort id from URL
+// // //  const id = id;
+// //   useEffect(() => {
+// //     // Fetch fort details and prefill form
+// //     getFortByIdApi(id)
+// //       .then((res) => {
+// //         setForm({
+// //           name: res.data.name || "",
+// //           description: res.data.description || "",
+// //           region: res.data.region || "",
+// //           imageUrl: res.data.imageUrl || "",
+// //         });
+// //       })
+// //       .catch((err) => console.error("Failed to load fort:", err));
+// //   }, [id]);
+
+// //   const handleChange = (e) => {
+// //     setForm({ ...form, [e.target.name]: e.target.value });
+// //   };
+
+// //   const handleSubmit = async (e) => {
+// //     e.preventDefault();
+// //     try {
+// //       await updateFortApi(id, form);
+// //       navigate("/manage-forts");
+// //     } catch (err) {
+// //       console.error("Error updating fort:", err);
+// //     }
+// //   };
+
+// //   return (
+// //     <main className="p-8 bg-gray-100 min-h-[83vh]">
+// //       <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+// //         <h1 className="text-3xl font-bold mb-4 text-orange-700">Edit Fort</h1>
+// //         <form onSubmit={handleSubmit} className="space-y-4">
+// //           <input
+// //             type="text"
+// //             name="name"
+// //             placeholder="Fort Name"
+// //             value={form.name}
+// //             onChange={handleChange}
+// //             required
+// //             className="w-full px-4 py-2 border rounded-lg"
+// //           />
+// //           <textarea
+// //             name="description"
+// //             placeholder="Description"
+// //             value={form.description}
+// //             onChange={handleChange}
+// //             required
+// //             className="w-full px-4 py-2 border rounded-lg"
+// //           />
+// //           <input
+// //             type="text"
+// //             name="region"
+// //             placeholder="Region"
+// //             value={form.region}
+// //             onChange={handleChange}
+// //             className="w-full px-4 py-2 border rounded-lg"
+// //           />
+// //           <input
+// //             type="text"
+// //             name="imageUrl"
+// //             placeholder="Image URL"
+// //             value={form.imageUrl}
+// //             onChange={handleChange}
+// //             className="w-full px-4 py-2 border rounded-lg"
+// //           />
+// //           <button
+// //             type="submit"
+// //             className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700"
+// //           >
+// //             Update Fort
+// //           </button>
+// //         </form>
+// //       </div>
+// //     </main>
+// //   );
+// // }
+
+// import { useParams, useNavigate } from "react-router-dom";
+// import { useEffect, useState } from "react";
+// import { getFortByIdApi, updateFortApi } from "../api/adminApi";
+
+// export default function EditFort() {
+//   const { id } = useParams();
+//   console.log(id)
+//   const navigate = useNavigate();
+
+//   const [form, setForm] = useState({
+//     name: "",
+//     region: "",
+//     history: "",
+//     altitude: "",
+//     baseVillage: "",
+//     difficulty: "",
+//     bestSeason: "",
+//     trekDuration: "",
+//     images: "",
+//     entryFee: "",
+//     openingHours: "",
+//     // Add other fields as needed
+//   });
+
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchFort = async () => {
+//       try {
+//         const res = await getFortByIdApi(id);
+//         const fort = res.data;
+//         console.log(fort)
+//         console.log("I found the data")
+//         // Pre-fill form
+//         setForm({
+//           name: fort.name || "",
+//           region: fort.region || "",
+//           history: fort.history || "",
+//           altitude: fort.altitude || "",
+//           baseVillage: fort.baseVillage || "",
+//           difficulty: fort.difficulty || "",
+//           bestSeason: fort.bestSeason || "",
+//           trekDuration: fort.trekDuration || "",
+//           images: Array.isArray(fort.images) ? fort.images.join(", ") : fort.images || "",
+//           entryFee: fort.entryFee || "",
+//           openingHours: fort.openingHours || "",
+//         });
+//       } catch (err) {
+//         console.error("Failed to fetch fort:", err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchFort();
+//   }, [id]);
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setForm((prev) => ({ ...prev, [name]: value }));
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       await updateFortApi(id, {
+//         ...form,
+//         // images: form.images.split(",").map((i) => i.trim()),
+//         images: (form.images || "").split(",").map((i) => i.trim()),
+//       });
+//       navigate("/manage-forts"); // go back after update
+//     } catch (err) {
+//       console.error("Failed to update fort:", err);
+//     }
+//   };
+
+//   if (loading) return <p>Loading fort data...</p>;
+
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       <input name="name" value={form.name} onChange={handleChange} />
+//       <input name="region" value={form.region} onChange={handleChange} />
+//       <input name="history" value={form.history} onChange={handleChange} />
+//       <input name="images" value={form.images} onChange={handleChange} />
+//       {/* Add other fields */}
+//       <button type="submit">Update Fort</button>
+//     </form>
+//   );
+// }
+
+
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getFortByIdApi, updateFortApi } from "../api/adminApi";
+
+export default function EditFort() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    id: "",
+    name: "",
+    region: "",
+    history: "",
+    altitude: "",
+    baseVillage: "",
+    difficulty: "",
+    bestSeason: "",
+    trekDuration: "",
+    routes: "", // comma separated string for easier input
+    nearest: { railway: "", bus: "", airport: "" },
+    contacts: { guides: "", drivers: "" }, // comma separated "name:phone" strings
+    location: { lat: "", lng: "" },
+    images: "",
+    pdfGuide: "",
+    entryFee: "",
+    openingHours: "",
+    campingAllowed: false,
+    safetyTips: "",
+    specialAttractions: "",
+    nearbyForts: "",
+    hotelFacility: "",
+    waterFacility: "",
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFort = async () => {
+      try {
+        const res = await getFortByIdApi(id);
+        const fort = res.data;
+
+        setForm({
+          id: fort.id || "",
+          name: fort.name || "",
+          region: fort.region || "",
+          history: fort.history || "",
+          altitude: fort.altitude || "",
+          baseVillage: fort.baseVillage || "",
+          difficulty: fort.difficulty || "",
+          bestSeason: fort.bestSeason || "",
+          trekDuration: fort.trekDuration || "",
+          routes: Array.isArray(fort.routes)
+            ? fort.routes.map((r) => r.name).join(", ")
+            : "",
+          nearest: fort.nearest || { railway: "", bus: "", airport: "" },
+          contacts: {
+            guides: fort.contacts?.guides
+              ? fort.contacts.guides.map((c) => `${c.name}:${c.phone}`).join(", ")
+              : "",
+            drivers: fort.contacts?.drivers
+              ? fort.contacts.drivers.map((c) => `${c.name}:${c.phone}`).join(", ")
+              : "",
+          },
+          location: fort.location || { lat: "", lng: "" },
+          images: Array.isArray(fort.images) ? fort.images.join(", ") : "",
+          pdfGuide: fort.pdfGuide || "",
+          entryFee: fort.entryFee || "",
+          openingHours: fort.openingHours || "",
+          campingAllowed: fort.campingAllowed || false,
+          safetyTips: fort.safetyTips ? fort.safetyTips.join(", ") : "",
+          specialAttractions: fort.specialAttractions ? fort.specialAttractions.join(", ") : "",
+          nearbyForts: fort.nearbyForts ? fort.nearbyForts.join(", ") : "",
+          hotelFacility: fort.hotelFacility || "",
+          waterFacility: fort.waterFacility || "",
+        });
+      } catch (err) {
+        console.error("Failed to fetch fort:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFort();
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    // handle nested fields
+    if (name.startsWith("nearest.")) {
+      const key = name.split(".")[1];
+      setForm((prev) => ({
+        ...prev,
+        nearest: { ...prev.nearest, [key]: value },
+      }));
+    } else if (name.startsWith("location.")) {
+      const key = name.split(".")[1];
+      setForm((prev) => ({
+        ...prev,
+        location: { ...prev.location, [key]: parseFloat(value) || 0 },
+      }));
+    } else if (name === "campingAllowed") {
+      setForm((prev) => ({ ...prev, campingAllowed: checked }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Prepare payload
+      const payload = {
+        ...form,
+        routes: form.routes
+          ? form.routes.split(",").map((name) => ({ name: name.trim() }))
+          : [],
+        contacts: {
+          guides: form.contacts.guides
+            ? form.contacts.guides.split(",").map((c) => {
+                const [name, phone] = c.split(":").map((s) => s.trim());
+                return { name, phone };
+              })
+            : [],
+          drivers: form.contacts.drivers
+            ? form.contacts.drivers.split(",").map((c) => {
+                const [name, phone] = c.split(":").map((s) => s.trim());
+                return { name, phone };
+              })
+            : [],
+        },
+        images: form.images ? form.images.split(",").map((i) => i.trim()) : [],
+        safetyTips: form.safetyTips
+          ? form.safetyTips.split(",").map((i) => i.trim())
+          : [],
+        specialAttractions: form.specialAttractions
+          ? form.specialAttractions.split(",").map((i) => i.trim())
+          : [],
+        nearbyForts: form.nearbyForts
+          ? form.nearbyForts.split(",").map((i) => i.trim())
+          : [],
+      };
+
+      await updateFortApi(id, payload);
+      navigate("/manage-forts");
+    } catch (err) {
+      console.error("Failed to update fort:", err);
+    }
+  };
+
+  if (loading) return <p>Loading fort data...</p>;
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 p-4">
+      <input name="name" value={form.name} onChange={handleChange} placeholder="Fort Name" />
+      <input name="region" value={form.region} onChange={handleChange} placeholder="Region" />
+      <input name="history" value={form.history} onChange={handleChange} placeholder="History" />
+      <input name="altitude" value={form.altitude} onChange={handleChange} placeholder="Altitude" />
+      <input name="baseVillage" value={form.baseVillage} onChange={handleChange} placeholder="Base Village" />
+      <input name="difficulty" value={form.difficulty} onChange={handleChange} placeholder="Difficulty" />
+      <input name="bestSeason" value={form.bestSeason} onChange={handleChange} placeholder="Best Season" />
+      <input name="trekDuration" value={form.trekDuration} onChange={handleChange} placeholder="Trek Duration" />
+      
+      <input name="routes" value={form.routes} onChange={handleChange} placeholder="Routes (comma separated)" />
+      <input name="nearest.railway" value={form.nearest.railway} onChange={handleChange} placeholder="Nearest Railway" />
+      <input name="nearest.bus" value={form.nearest.bus} onChange={handleChange} placeholder="Nearest Bus" />
+      <input name="nearest.airport" value={form.nearest.airport} onChange={handleChange} placeholder="Nearest Airport" />
+
+      <input name="contacts.guides" value={form.contacts.guides} onChange={handleChange} placeholder="Guides name:phone, ..." />
+      <input name="contacts.drivers" value={form.contacts.drivers} onChange={handleChange} placeholder="Drivers name:phone, ..." />
+
+      <input name="location.lat" value={form.location.lat} onChange={handleChange} placeholder="Latitude" />
+      <input name="location.lng" value={form.location.lng} onChange={handleChange} placeholder="Longitude" />
+
+      <input name="images" value={form.images} onChange={handleChange} placeholder="Images URLs, comma separated" />
+      <input name="pdfGuide" value={form.pdfGuide} onChange={handleChange} placeholder="PDF Guide URL" />
+      <input name="entryFee" value={form.entryFee} onChange={handleChange} placeholder="Entry Fee" />
+      <input name="openingHours" value={form.openingHours} onChange={handleChange} placeholder="Opening Hours" />
+      <label>
+        <input type="checkbox" name="campingAllowed" checked={form.campingAllowed} onChange={handleChange} />
+        Camping Allowed
+      </label>
+      <input name="safetyTips" value={form.safetyTips} onChange={handleChange} placeholder="Safety Tips, comma separated" />
+      <input name="specialAttractions" value={form.specialAttractions} onChange={handleChange} placeholder="Special Attractions, comma separated" />
+      <input name="nearbyForts" value={form.nearbyForts} onChange={handleChange} placeholder="Nearby Forts, comma separated" />
+      <input name="hotelFacility" value={form.hotelFacility} onChange={handleChange} placeholder="Hotel Facility" />
+      <input name="waterFacility" value={form.waterFacility} onChange={handleChange} placeholder="Water Facility" />
+
+      <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Update Fort</button>
+    </form>
+  );
+}

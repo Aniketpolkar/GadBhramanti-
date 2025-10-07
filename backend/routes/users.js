@@ -1,13 +1,13 @@
 import express from 'express';
-import {authMiddleware} from '../middleware/auth.js';
+import verifyUserToken from '../middleware/auth.js';
 import User from '../models/user.js';
 
 const router = express.Router();
 
 // GET /users/me
-router.get('/me', authMiddleware, async (req, res) => {
+router.get('/me', verifyUserToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password')
+    const user = await User.findById(req.user.id).select('-passwordHash')
   .populate('visitedForts')
   .populate('wishlist');
 

@@ -1,0 +1,576 @@
+// import { useEffect, useState } from 'react';
+
+// export default function ManageComments() {
+//   const [comments, setComments] = useState([]);
+
+//   const fetchComments = async () => {
+//     const res = await fetch('/api/admin/comments', {
+//       headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
+//     });
+//     const data = await res.json();
+//     setComments(data);
+//   };
+
+//   const deleteComment = async (id) => {
+//     await fetch(`/api/admin/comments/${id}`, {
+//       method: 'DELETE',
+//       headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
+//     });
+//     fetchComments();
+//   };
+
+//   useEffect(() => { fetchComments(); }, []);
+
+//   return (
+//     <div>
+//       <main>
+//         <h1>Manage Comments</h1>
+//         <ul>
+//           {comments.map(comment => (
+//             <li key={comment.id}>
+//               <strong>{comment.fortName}</strong>: {comment.text}
+//               <button onClick={() => deleteComment(comment.id)}>Delete</button>
+//             </li>
+//           ))}
+//         </ul>
+//       </main>
+     
+//     </div>
+//   );
+// }
+
+// import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { getFortsApi, deleteFortApi, updateFortApi } from "../api/adminApi";
+
+// export default function ManageComments() {
+//   const [forts, setForts] = useState([]);
+//   const [editingId, setEditingId] = useState(null);
+//   const [editName, setEditName] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+
+//   const navigate = useNavigate();
+
+//   const fetchForts = async () => {
+//     try {
+//       setLoading(true);
+//       const res = await getFortsApi();
+//       setForts(res.data);
+//     } catch (err) {
+//       setError("Failed to load forts");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleDeleteFort = async (id) => {
+//     try {
+//       await deleteFortApi(id);
+//       fetchForts();
+//     } catch {
+//       setError("Failed to delete fort");
+//     }
+//   };
+
+//   const handleEditFort = (fort) => {
+//     setEditingId(fort._id);
+//     setEditName(fort.name);
+//   };
+
+//   const handleUpdateFort = async (id) => {
+//     if (!editName.trim()) return;
+//     try {
+//       await updateFortApi(id, { name: editName });
+//       setEditingId(null);
+//       setEditName("");
+//       fetchForts();
+//     } catch {
+//       setError("Failed to update fort");
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchForts();
+//   }, []);
+
+//   return (
+//     <div className="min-h-[83vh] flex flex-col bg-gray-100">
+//       <main className="flex-1 max-w-6xl mx-auto p-6">
+//         <h1 className="text-3xl font-bold mb-6 text-gray-800">Manage Forts</h1>
+
+//         {error && <p className="text-red-600 mb-4">{error}</p>}
+
+//         {/* Add Fort */}
+//         <div className="flex justify-end mb-6">
+//           <button
+//             onClick={() => navigate("/add-fort")}
+//             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+//           >
+//             + Add New Fort
+//           </button>
+//         </div>
+
+//         {/* Forts Grid */}
+//         {loading ? (
+//           <p>Loading forts...</p>
+//         ) : forts.length > 0 ? (
+//           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+//             {forts.map((fort) => (
+//               <div
+//                 key={fort._id}
+//                 className="bg-white rounded-lg shadow-md p-4 flex flex-col"
+//               >
+//                 {editingId === fort._id ? (
+//                   <div className="flex flex-col gap-2">
+//                     <input
+//                       value={editName}
+//                       onChange={(e) => setEditName(e.target.value)}
+//                       className="px-2 py-1 border rounded"
+//                     />
+//                     <div className="flex gap-2">
+//                       <button
+//                         onClick={() => handleUpdateFort(fort._id)}
+//                         className="flex-1 px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700"
+//                       >
+//                         Save
+//                       </button>
+//                       <button
+//                         onClick={() => setEditingId(null)}
+//                         className="flex-1 px-3 py-1 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
+//                       >
+//                         Cancel
+//                       </button>
+//                     </div>
+//                   </div>
+//                 ) : (
+//                   <>
+//                     {/* Fort Image */}
+//                     {fort.images?.[0] && (
+//                       <img
+//                         src={fort.images[0]}
+//                         alt={fort.name}
+//                         className="w-full h-40 object-cover rounded-md mb-3"
+//                       />
+//                     )}
+
+//                     {/* Fort Info */}
+//                     <h2 className="text-xl font-semibold text-gray-800 mb-2">
+//                       {fort.name}
+//                     </h2>
+//                     <div className="text-sm text-gray-600 space-y-1 flex-1">
+//                       {fort.region && (
+//                         <p>
+//                           <span className="font-medium">Region:</span>{" "}
+//                           {fort.region}
+//                         </p>
+//                       )}
+//                          {/* Display comments */}
+//                   <div className="space-y-4 mb-6">
+//                     {fort.comments?.length > 0 ? (
+//                       fort.comments.map(c => (
+//                         <div key={c._id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-start space-x-4">
+//                           <img
+//                             src={c.user?.profilePic || 'https://via.placeholder.com/40'}
+//                             alt={c.user?.username || "User"}
+//                             className="h-10 w-10 rounded-full object-cover border-2 border-orange-500"
+//                           />
+//                           <div className="flex-1">
+//                             <div className="flex items-center justify-between">
+//                               <span className="font-semibold text-orange-600 text-lg">{c.user?.username || "Unknown User"}</span>
+//                               <span className="text-xs text-gray-500">
+//                                 {new Date(c.createdAt).toLocaleDateString("en-GB", {
+//                                   day: "2-digit",
+//                                   month: "short",
+//                                   year: "numeric"
+//                                 })}
+//                               </span>
+//                             </div>
+//                             <p className="mt-1 text-gray-700 leading-snug">{c.text}</p>
+//                           </div>
+//                         </div>
+//                       ))
+//                     ) : (
+//                       <p className="text-gray-500 text-center">No comments yet. Be the first to share your thoughts!</p>
+//                     )}
+//                   </div>
+//                     </div>
+
+
+
+//                     {/* Actions */}
+//                     {/* <div className="mt-4 flex gap-2">
+//                       <button
+//                         onClick={() => handleEditFort(fort)}
+//                         className="flex-1 px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+//                       >
+//                         Quick Edit
+//                       </button>
+//                       <button
+//                         onClick={() => navigate(`/edit-fort`)}
+//                         className="flex-1 px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+//                       >
+//                         Edit Details
+//                       </button>
+//                       <button
+//                         onClick={() => handleDeleteFort(fort._id)}
+//                         className="flex-1 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700"
+//                       >
+//                         Delete
+//                       </button>
+//                     </div> */}
+//                   </>
+//                 )}
+//               </div>
+//             ))}
+//           </div>
+          
+//         ) : (
+//           <p className="text-gray-500">
+//             No forts found. Add one to get started!
+//           </p>
+
+//         )}
+//       </main>
+//     </div>
+//   );
+// }
+
+// src/pages/ManageComments.js
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  getFortsApi,
+  deleteFortApi,
+  updateFortApi,
+  addCommentApi,
+  updateCommentApi,
+  deleteCommentApi,
+} from "../api/adminApi";
+
+export default function ManageComments() {
+  const [forts, setForts] = useState([]);
+  const [editingFortId, setEditingFortId] = useState(null);
+  const [editFortName, setEditFortName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Comment states
+  const [newCommentText, setNewCommentText] = useState({});
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editCommentText, setEditCommentText] = useState("");
+
+  const navigate = useNavigate();
+
+  // Fetch forts
+  const fetchForts = async () => {
+    try {
+      setLoading(true);
+      const res = await getFortsApi();
+      setForts(res.data);
+    } catch {
+      setError("Failed to load forts");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fort delete
+  const handleDeleteFort = async (id) => {
+    try {
+      await deleteFortApi(id);
+      fetchForts();
+    } catch {
+      setError("Failed to delete fort");
+    }
+  };
+
+  // Fort quick edit
+  const handleEditFort = (fort) => {
+    setEditingFortId(fort._id);
+    setEditFortName(fort.name);
+  };
+
+  const handleUpdateFort = async (id) => {
+    if (!editFortName.trim()) return;
+    try {
+      await updateFortApi(id, { name: editFortName });
+      setEditingFortId(null);
+      setEditFortName("");
+      fetchForts();
+    } catch {
+      setError("Failed to update fort");
+    }
+  };
+
+  // Comment add
+  const handleAddComment = async (fortId) => {
+    const text = newCommentText[fortId]?.trim();
+    if (!text) return;
+
+    try {
+      await addCommentApi(fortId, {
+        text,
+        userId: "replace-with-logged-in-user-id", // ⚡ TODO: plug actual userId from auth
+      });
+      setNewCommentText({ ...newCommentText, [fortId]: "" });
+      fetchForts();
+    } catch {
+      setError("Failed to add comment");
+    }
+  };
+
+  // Comment update
+  const handleUpdateComment = async (fortId, commentId) => {
+    if (!editCommentText.trim()) return;
+
+    try {
+      await updateCommentApi(fortId, commentId, { text: editCommentText });
+      setEditingCommentId(null);
+      setEditCommentText("");
+      fetchForts();
+    } catch {
+      setError("Failed to update comment");
+    }
+  };
+
+  // Comment delete
+  const handleDeleteComment = async (fortId, commentId) => {
+    try {
+      await deleteCommentApi(fortId, commentId);
+      fetchForts();
+    } catch {
+      setError("Failed to delete comment");
+    }
+  };
+
+  useEffect(() => {
+    fetchForts();
+  }, []);
+
+  return (
+    <div className="min-h-[83vh] flex flex-col bg-gray-100">
+      <main className="flex-1 max-w-6xl mx-auto p-6">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800">
+          Manage Forts & Comments
+        </h1>
+
+        {error && <p className="text-red-600 mb-4">{error}</p>}
+
+        {/* Add Fort */}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={() => navigate("/add-fort")}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            + Add New Fort
+          </button>
+        </div>
+
+        {/* Forts Grid */}
+        {loading ? (
+          <p>Loading forts...</p>
+        ) : forts.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {forts.map((fort) => (
+              <div
+                key={fort._id}
+                className="bg-white rounded-lg shadow-md p-4 flex flex-col"
+              >
+                {editingFortId === fort._id ? (
+                  <div className="flex flex-col gap-2">
+                    <input
+                      value={editFortName}
+                      onChange={(e) => setEditFortName(e.target.value)}
+                      className="px-2 py-1 border rounded"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleUpdateFort(fort._id)}
+                        className="flex-1 px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setEditingFortId(null)}
+                        className="flex-1 px-3 py-1 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {/* Fort Image */}
+                    {fort.images?.[0] && (
+                      <img
+                        src={fort.images[0]}
+                        alt={fort.name}
+                        className="w-full h-40 object-cover rounded-md mb-3"
+                      />
+                    )}
+
+                    {/* Fort Info */}
+                    <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                      {fort.name}
+                    </h2>
+                    {fort.region && (
+                      <p className="text-sm text-gray-600 mb-3">
+                        <span className="font-medium">Region:</span>{" "}
+                        {fort.region}
+                      </p>
+                    )}
+
+                    {/* Comments */}
+                    <div className="space-y-4 mb-4">
+                      {fort.comments?.length > 0 ? (
+                        fort.comments.map((c) => (
+                          <div
+                            key={c._id}
+                            className="bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-200"
+                          >
+                            <div className="flex items-start space-x-3">
+                              <img
+                                src={
+                                  c.user?.profilePic ||
+                                  "https://via.placeholder.com/40"
+                                }
+                                alt={c.user?.username || "User"}
+                                className="h-10 w-10 rounded-full object-cover border-2 border-orange-500"
+                              />
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-semibold text-orange-600">
+                                    {c.user?.username || "Unknown User"}
+                                  </span>
+                                  <span className="text-xs text-gray-500">
+                                    {new Date(c.createdAt).toLocaleDateString(
+                                      "en-GB",
+                                      {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                      }
+                                    )}
+                                  </span>
+                                </div>
+
+                                {editingCommentId === c._id ? (
+                                  <div className="mt-2 flex gap-2">
+                                    <input
+                                      value={editCommentText}
+                                      onChange={(e) =>
+                                        setEditCommentText(e.target.value)
+                                      }
+                                      className="flex-1 border rounded px-2 py-1"
+                                    />
+                                    <button
+                                      onClick={() =>
+                                        handleUpdateComment(fort._id, c._id)
+                                      }
+                                      className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                                    >
+                                      Save
+                                    </button>
+                                    <button
+                                      onClick={() => setEditingCommentId(null)}
+                                      className="px-3 py-1 bg-gray-400 text-white rounded hover:bg-gray-500"
+                                    >
+                                      Cancel
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <p className="mt-1 text-gray-700">
+                                      {c.text}
+                                    </p>
+                                    <div className="flex gap-4 mt-2 text-sm">
+                                      <button
+                                        onClick={() => {
+                                          setEditingCommentId(c._id);
+                                          setEditCommentText(c.text);
+                                        }}
+                                        className="text-yellow-600 hover:underline"
+                                      >
+                                        Edit
+                                      </button>
+                                      <button
+                                        onClick={() =>
+                                          handleDeleteComment(fort._id, c._id)
+                                        }
+                                        className="text-red-600 hover:underline"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-500 text-center">
+                          No comments yet. Be the first to share your thoughts!
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Add Comment */}
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Write a comment..."
+                        value={newCommentText[fort._id] || ""}
+                        onChange={(e) =>
+                          setNewCommentText({
+                            ...newCommentText,
+                            [fort._id]: e.target.value,
+                          })
+                        }
+                        className="flex-1 border rounded px-2 py-1"
+                      />
+                      <button
+                        onClick={() => handleAddComment(fort._id)}
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                      >
+                        Add
+                      </button>
+                    </div>
+
+                    {/* Fort Actions */}
+                    <div className="mt-4 flex gap-2">
+                      <button
+                        onClick={() => handleEditFort(fort)}
+                        className="flex-1 px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                      >
+                        Quick Edit
+                      </button>
+                      <button
+                        onClick={() => navigate(`/edit-fort`)}
+                        className="flex-1 px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                      >
+                        Edit Details
+                      </button>
+                      <button
+                        onClick={() => handleDeleteFort(fort._id)}
+                        className="flex-1 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500">
+            No forts found. Add one to get started!
+          </p>
+        )}
+      </main>
+    </div>
+  );
+}
+

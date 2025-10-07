@@ -15,7 +15,7 @@
 //     e.preventDefault();
 //     try {
 //       const res = await API.post('/auth/login', form);
-//       loginUser(res.data.user, res.data.token);
+//       loginUser(res.data.user, res.data.userToken);
 //       navigate('/profile');
 //     } catch (err) {
 //       setError(err.response?.data?.message || 'Error occurred');
@@ -63,7 +63,10 @@ const Login = () => {
     try {
       const res = await API.post("/auth/login", form);
 
-      // Save user & token to context
+          // Save token to localStorage
+    localStorage.setItem("userToken", res.data.token);
+
+      // Save user & userToken to context
       loginUser(res.data.user, res.data.token);
 
       // Redirect
@@ -210,14 +213,25 @@ const Login = () => {
           </div>
 
           {/* Footer */}
-          <div className="px-8 py-6 bg-gray-50 border-t border-gray-100">
+          {/* <div className="px-8 py-6 bg-gray-50 border-t border-gray-100">
             <div className="text-center text-sm text-gray-600">
               Don&apos;t have an account?{" "}
-              <button className="text-slate-600 hover:text-slate-800 font-semibold transition-colors">
+              <button  className="text-slate-600 hover:text-slate-800 font-semibold transition-colors">
                 Create Account
               </button>
             </div>
-          </div>
+          </div> */}
+           <div className="px-8 py-6 bg-gray-50 border-t border-gray-100">
+      <div className="text-center text-sm text-gray-600">
+        Don&apos;t have an account?{" "}
+        <button
+          onClick={() => navigate("/register")}
+          className="text-slate-600 hover:text-slate-800 font-semibold transition-colors"
+        >
+          Create Account
+        </button>
+      </div>
+    </div>
         </form>
 
         {/* Security Notice */}

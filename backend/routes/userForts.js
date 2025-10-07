@@ -133,11 +133,13 @@
 // export default router;
 
 import express from 'express';
+import  verifyUserToken  from '../middleware/auth.js';
 import Fort from '../models/fort.js';
-import { verifyToken, authMiddleware } from '../middleware/auth.js';
 import User from '../models/user.js';
 import Route from '../models/route.js';
 const router = express.Router();
+import { toggleLike, toggleWishlist, toggleVisited } from "../controllers/fortController.js";
+import auth from "../middleware/auth.js"; 
 
 // GET all forts
 router.get('/', async (req, res) => {
@@ -174,7 +176,7 @@ router.get('/:id/routes', async (req, res) => {
 });
 
 // POST comment to fort
-router.post("/:fortId/comment", verifyToken, async (req, res) => {
+router.post("/:fortId/comment", verifyUserToken, async (req, res) => {
   try {
     // 1. Find the fort by ID
     const fort = await Fort.findById(req.params.fortId);
@@ -269,5 +271,11 @@ router.get("/:fortId/comments", async (req, res) => {
 //     res.status(500).json({ error: err.message });
 //   }
 // });
+
+router.post("/:id/like", auth, toggleLike);
+router.post("/:id/wishlist", auth, toggleWishlist);
+// router.post("/:id/visited", auth, toggleVisited);
+// Toggle visited fort
+router.put("/:id/visited", auth, toggleVisited);
 
 export default router;

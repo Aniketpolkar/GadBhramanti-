@@ -80,13 +80,13 @@ const Hero = () => {
           </Link>
           
           <Link
-            to="/about"
+            to="/blog-list"
             className="group px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white/20 hover:scale-105 flex items-center gap-3"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.01M15 10h1.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>Learn More</span>
+            <span>Blog List</span>
           </Link>
         </div>
 
